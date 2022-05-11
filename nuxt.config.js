@@ -1,3 +1,5 @@
+import path from 'path'
+import fs from 'fs'
 
 export default {
   /*
@@ -17,9 +19,19 @@ export default {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
+    script: [{ src: 'https://telegram.org/js/telegram-web-app.js' }],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
+  },
+
+  server: {
+    host: '89.108.77.101', // default: localhost,
+    port: 443,
+    https: {
+      key: fs.readFileSync(path.resolve(__dirname, 'server.key')),
+      cert: fs.readFileSync(path.resolve(__dirname, 'server.crt'))
+    }
   },
 
   /*
