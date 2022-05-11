@@ -36,7 +36,7 @@ export default {
   }),
   async mounted () {
     const params = this.$route.query
-    this.subscription = await this.$http.$get(`https://roompassbot-api.ru/api/users/${params.user}/${params.type}`)
+    this.subscription = await this.$http.$get(`/api/users/${params.user}/${params.type}`)
 
     window.Telegram.WebApp.MainButton.setText('Закрыть')
     window.Telegram.WebApp.MainButton.show()

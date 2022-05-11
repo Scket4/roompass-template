@@ -25,32 +25,26 @@ export default {
     ]
   },
 
-  server: {
-    host: '89.108.77.101', // default: localhost,
-    port: 443,
-    https: {
-      key: fs.readFileSync(path.resolve(__dirname, 'server.key')),
-      cert: fs.readFileSync(path.resolve(__dirname, 'server.crt'))
-    }
-  },
+  server: process.env.DEV
+    ? {
+        host: process.env.HOST,
+        port: process.env.PORT
+      }
+    : {
+        host: process.env.HOST,
+        port: process.env.PORT,
+        https: {
+          key: fs.readFileSync(path.resolve(__dirname, 'server.key')),
+          cert: fs.readFileSync(path.resolve(__dirname, 'server.crt'))
+        }
+      },
 
-  /*
-  ** Global CSS
-  */
   css: [
   ],
 
-  /*
-  ** Plugins to load before mounting the App
-  ** https://nuxtjs.org/guide/plugins
-  */
   plugins: [
   ],
 
-  /*
-  ** Auto import components
-  ** See https://nuxtjs.org/api/configuration-components
-  */
   components: true,
 
   /*
@@ -58,7 +52,8 @@ export default {
   */
   buildModules: [
     // Doc: https://github.com/nuxt-community/eslint-module
-    '@nuxtjs/eslint-module'
+    '@nuxtjs/eslint-module',
+    '@nuxtjs/dotenv'
   ],
 
   /*
@@ -70,8 +65,7 @@ export default {
   ],
 
   http: {
-    // HTTP options here
-    https: true,
+    baseURL: process.env.BASE_URL,
     rejectUnauthorized: false
   },
 
@@ -81,14 +75,6 @@ export default {
   serverMiddleware: {
     '/api': '~/api'
   },
-
-  /*
-  ** For deployment you might want to edit host and port
-  */
-  // server: {
-  //  port: 8000, // default: 3000
-  //  host: '0.0.0.0' // default: localhost
-  // },
 
   /*
   ** Build configuration
