@@ -1,7 +1,17 @@
+// const fs = require('fs')
+// const https = require('https')
+// const path = require('path')
 const express = require('express')
 
 // Create express instance
 const app = express()
+
+// const options = {
+//   key: fs.readFileSync(path.resolve(__dirname, '../server.key')),
+//   cert: fs.readFileSync(path.resolve(__dirname, '../server.crt'))
+// }
+
+// const server = https.createServer(options, app).listen()
 
 // Require API routes
 const users = require('./routes/users')

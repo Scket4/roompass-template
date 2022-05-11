@@ -1,38 +1,43 @@
 <template>
   <div class="container-profile">
-    <div class="coins">
-      <img ref="coin" src="../../assets/coin.png" class="coin" alt="coin">
-      <p class="coins__count">
-        {{ coins }}
-      </p>
-    </div>
-    <div class="date">
-      <p class="date__text--hint">
-        Действует до
-      </p>
+    <template v-if="subscription.coins">
+      <div class="coins">
+        <img ref="coin" src="../../assets/coin.png" class="coin" alt="coin">
+        <p class="coins__count">
+          {{ subscription.coins }}
+        </p>
+      </div>
+      <div class="date">
+        <p class="date__text--hint">
+          Действует до
+        </p>
+        <p class="date__text">
+          {{ new Date(subscription.date_end).toLocaleDateString('ru-RU') }}
+        </p>
+      </div>
+    </template>
+    <div v-else class="empty">
       <p class="date__text">
-        {{ date_end }}
+        У вас нет активного абонемента :(
+      </p>
+      <p class="date__text--hint">
+        Чтобы приобрести абонемент - нажмите на кнопку "Прочие действия" - "Оформить абонемент"
+        Либо обратитесь к&nbsp;
+        <a href="https://t.me/platforma_coworking_admin">администратору</a>
       </p>
     </div>
-
-    {{ users }}
   </div>
 </template>
 
 <script>
 export default {
-  async asyncData ({ $http }) {
-    const data = await $http.$get('/api/users')
-    return { users: data }
-  },
   data: () => ({
-    about: ' js разработчик',
-    coins: 540,
-    date_end: '18.05.2022',
-    tlgm: '',
-    params: ''
+    subscription: {}
   }),
-  mounted () {
+  async mounted () {
+    const params = this.$route.query
+    this.subscription = await this.$http.$get(`https://roompassbot-api.ru/api/users/${params.user}/${params.type}`)
+
     window.Telegram.WebApp.MainButton.setText('Закрыть')
     window.Telegram.WebApp.MainButton.show()
     window.Telegram.WebApp.MainButton.onClick(() => {
@@ -43,14 +48,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 $textColor: var(--tg-theme-text-color);
 $bgolor: var(--tg-theme-bg-color);
 $hintColor: var(--tg-theme-hint-color);
+$linkColor: var(--tg-theme-link-color);
 
 .container-profile {
   max-width: 800%;
-  height: 100%;
+  min-height: 100vh;
   background-color: $bgolor;
   color: $textColor;
   display: flex;
@@ -98,6 +103,28 @@ $hintColor: var(--tg-theme-hint-color);
       }
     }
   }
+}
+
+.empty {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-top: 25px;
+  align-items: flex-start;
+  padding: 0 25px;
+
+  p {
+    text-align: left;
+  }
+
+  &>p {
+    margin-bottom: 25px;
+  }
+}
+
+a {
+  color: $linkColor;
 }
 
 @keyframes rotate {

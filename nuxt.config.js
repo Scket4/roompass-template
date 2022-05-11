@@ -69,6 +69,12 @@ export default {
     '@nuxt/http'
   ],
 
+  http: {
+    // HTTP options here
+    https: true,
+    rejectUnauthorized: false
+  },
+
   /*
   ** Server Middleware
   */
