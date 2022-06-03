@@ -4,7 +4,7 @@ const mysql = require('mysql2')
 const router = Router()
 
 const connectionBeta = mysql.createConnection({
-  host: '89.223.71.192',
+  host: '85.193.84.146',
   port: 3306,
   user: 'gen_user',
   database: 'default_db',
