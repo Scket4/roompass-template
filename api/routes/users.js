@@ -8,11 +8,11 @@ let connectionPlatforma
 
 const beta = () => {
   connectionBeta = mysql.createConnection({
-    host: '85.193.84.146',
-    port: 3306,
-    user: 'gen_user',
-    database: 'default_db',
-    password: 'LEXAALEXscket4'
+    port: process.env.BETA_PORT,
+    user: process.env.BETA_USER,
+    host: process.env.BETA_HOST,
+    database: process.env.BETA_NAME,
+    password: process.env.BETA_PASSWORD
   }).promise()
 
   connectionBeta.connect((err) => {
@@ -35,11 +35,11 @@ const beta = () => {
 
 const platforma = () => {
   connectionPlatforma = mysql.createConnection({
-    host: '188.225.86.225',
-    port: 3306,
-    user: 'gen_user',
-    database: 'default_db',
-    password: 'LEXAALEXscket4'
+    port: process.env.PLATFORMA_PORT,
+    user: process.env.PLATFORMA_USER,
+    host: process.env.PLATFORMA_HOST,
+    database: process.env.PLATFORMA_NAME,
+    password: process.env.PLATFORMA_PASSWORD
   }).promise()
 
   connectionPlatforma.connect((err) => {
