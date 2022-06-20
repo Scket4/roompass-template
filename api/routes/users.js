@@ -3,21 +3,65 @@ const mysql = require('mysql2')
 
 const router = Router()
 
-const connectionBeta = mysql.createConnection({
-  host: '85.193.84.146',
-  port: 3306,
-  user: 'gen_user',
-  database: 'default_db',
-  password: 'LEXAALEXscket4'
-}).promise()
+let connectionBeta
+let connectionPlatforma
 
-const connectionPlatforma = mysql.createConnection({
-  host: '188.225.86.225',
-  port: 3306,
-  user: 'gen_user',
-  database: 'default_db',
-  password: 'LEXAALEXscket4'
-}).promise()
+const beta = () => {
+  connectionBeta = mysql.createConnection({
+    host: '85.193.84.146',
+    port: 3306,
+    user: 'gen_user',
+    database: 'default_db',
+    password: 'LEXAALEXscket4'
+  }).promise()
+
+  connectionBeta.connect((err) => {
+    if (err) {
+      console.log('error when connecting to BETA:', err)
+      setTimeout(beta(), 10000)
+    }
+    console.log('DataBase BETA connected')
+  })
+
+  connectionBeta.on('error', (err) => {
+    console.log('db error', err)
+    if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+      beta()
+    } else {
+      throw err
+    }
+  })
+}
+
+const platforma = () => {
+  connectionPlatforma = mysql.createConnection({
+    host: '188.225.86.225',
+    port: 3306,
+    user: 'gen_user',
+    database: 'default_db',
+    password: 'LEXAALEXscket4'
+  }).promise()
+
+  connectionPlatforma.connect((err) => {
+    if (err) {
+      console.log('error when connecting to PLATFORMA DB:', err)
+      setTimeout(platforma(), 10000)
+    }
+    console.log('DataBase PLATFFORMA connected')
+  })
+
+  connectionPlatforma.on('error', (err) => {
+    console.log('db error', err)
+    if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+      platforma()
+    } else {
+      throw err
+    }
+  })
+}
+
+platforma()
+beta()
 
 const dbs = {
   beta: connectionBeta,
@@ -33,15 +77,5 @@ router.get('/users/:id/:type', async function (req, res, next) {
   })
   res.json(subscription)
 })
-
-/* GET user by ID. */
-// router.get('/users/:id', function (req, res, next) {
-//   const id = parseInt(req.params.id)
-//   if (id >= 0 && id < users.length) {
-//     res.json(users[id])
-//   } else {
-//     res.sendStatus(404)
-//   }
-// })
 
 module.exports = router
